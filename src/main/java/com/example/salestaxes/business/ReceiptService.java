@@ -43,21 +43,19 @@ public class ReceiptService {
         Map<ProductDto,BigDecimal> taxRates=request.getProducts().stream()
                 .collect(Collectors.toMap(p->p,this::calculateTaxRate));
 
-        //Calculating the sum of taxes using the map of rates and round up the sum
-        BigDecimal sumTaxes = roundUp(request.getProducts().stream()
-                .map(p->getProductTax(p,taxRates.get(p)).multiply(BigDecimal.valueOf(p.getQuantity())))
-                .reduce(BigDecimal.ZERO,BigDecimal::add));
+        BigDecimal sumTaxes = BigDecimal.ZERO;
+        BigDecimal totalPrices = BigDecimal.ZERO;
 
-        //Update the prices of the products using the map of rates
-        request.getProducts().forEach(p -> {
-            BigDecimal tax = getProductTax(p, taxRates.get(p));
-            p.setPrice(roundUp(p.getPrice().add(tax)));
-        });
-
-        //Calculating the total of the updated prices and round up the total
-        BigDecimal totalPrices = roundUp(request.getProducts().stream()
-                .map(p->p.getPrice().multiply(BigDecimal.valueOf(p.getQuantity())))
-                .reduce(BigDecimal.ZERO,BigDecimal::add));
+        //Using this loop to calculate total and sumTaxes, I find it more efficient
+        // than using multiple Streams
+        for (ProductDto product : request.getProducts()) {
+            BigDecimal taxRate = taxRates.get(product);
+            BigDecimal tax = product.getPrice().multiply(taxRate);
+            BigDecimal taxedPrice = roundUp(product.getPrice().add(tax));
+            product.setPrice(taxedPrice);
+            sumTaxes = sumTaxes.add(tax.multiply(BigDecimal.valueOf(product.getQuantity())));
+            totalPrices = totalPrices.add(taxedPrice.multiply(BigDecimal.valueOf(product.getQuantity())));
+        }
 
         //Use the mapper to get the response
         return ReceiptMapper.map(request.getProducts(),totalPrices,sumTaxes);
