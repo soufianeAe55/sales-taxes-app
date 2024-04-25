@@ -36,6 +36,9 @@ public class ReceiptService {
     public ReceiptResponseDto generate(ReceiptRequestDto request) throws BusinessException {
         logger.info("Generating the receipt of the products...");
 
+        BigDecimal sumTaxes = BigDecimal.ZERO;
+        BigDecimal totalPrices = BigDecimal.ZERO;
+
         //Validating all the fields of the request using a layer of validation
         receiptValidator.validate(request);
 
@@ -43,11 +46,8 @@ public class ReceiptService {
         Map<ProductDto,BigDecimal> taxRates=request.getProducts().stream()
                 .collect(Collectors.toMap(p->p,this::calculateTaxRate));
 
-        BigDecimal sumTaxes = BigDecimal.ZERO;
-        BigDecimal totalPrices = BigDecimal.ZERO;
-
         //Using this loop to calculate total and sumTaxes, I find it more efficient
-        // than using multiple Streams
+        //than using multiple Streams
         for (ProductDto product : request.getProducts()) {
             BigDecimal taxRate = taxRates.get(product);
             BigDecimal tax = product.getPrice().multiply(taxRate);
