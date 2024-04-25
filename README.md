@@ -12,7 +12,7 @@ To try the Sales Taxes App, follow these steps:
  - You can test the API directly from the swagger, you will find also a full documentation of api there.
  - **Note: Due to the inactivity, the requests may be delayed for 50 seconds (it's a free server-.-)**
 
-##Project Structure
+## Project Structure
 
 I developed the application on several layers that are explained below, and I wrote units tests for all the class that contains some logic with (Junit and mockito), I also handled exceptions globally in the layer of exception to return to the client comprehensive responses:
 
@@ -26,7 +26,7 @@ I developed the application on several layers that are explained below, and I wr
  - **validation -** Contains validation logic for the requests received by the application.
  - **src/test/java -** Contains the application's unit tests.
 
-##Running the application
+## Running the application
 
 Navigate to the project directory.
 Run: mvn spring-boot:run
