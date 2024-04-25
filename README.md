@@ -10,7 +10,7 @@ To test the Sales Taxes App, follow these steps:
  - To facilitate testing the application, I have deployed the app on OneRender server, you will find the URL below : <br />
   *https://soufiane-images-latest.onrender.com/swagger-ui/index.html*
  - You can test the API directly from the swagger, you will find also a full documentation of api there.
- - **Note: Due to the inactivity, the requests may be delayed for 50 seconds**
+ - **Note: Due to the inactivity, the requests may be delayed for 50 seconds (it's a free server-.-)**
 
 
 ### Happy testing! I hope you like the application and enjoy exploring its features. 
